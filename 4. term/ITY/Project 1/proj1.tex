@@ -1,0 +1,44 @@
+\documentclass[a4paper, twocolumn, 11pt]{article}
+\usepackage{times}
+\usepackage[left=2cm, top=2.5cm, text={17cm, 24cm}]{geometry}
+\usepackage[latin2]{inputenc}
+\usepackage[czech]{babel}
+\providecommand{\uv}[1]{\quotedblbase#1\textquotedblleft}
+\title{Typografie a publikování \\
+1. projekt}
+\author{Ondøej Vale¹ \\
+xvales03@stud.fit.vutbr.cz}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Hladká sazba}
+
+Hladká sazba je sazba z~jednoho stupnì, druhu a øezu písma sázená na stanovenou ¹íøku odstavce. Skládá se z~odstavcù, které obvykle zaèínají zará¾kou, ale mohou být sázeny i bez zará¾ky\,--\,rozhodující je celková grafická úprava. Odstavce jsou ukonèeny východovou øádkou. Vìty nesmìjí zaèínat èíslicí.
+
+Barevné zvýraznìní, podtrhávání slov èi rùzné velikosti písma vybraných slov se zde také nepou¾ívá. Hladká sazba je urèena pøedev¹ím pro del¹í texty, jako je napøíklad beletrie. Poru¹ení konzistence sazby pùsobí v~textu ru¹ivì a unavuje ètenáøùv zrak.
+
+\section{Smí¹ená sazba}
+
+Smí¹ená sazba má o~nìco volnìj¹í pravidla ne¾ hladká sazba. Nejèastìji se klasická hladká sazba doplòuje o~dal¹í øezy písma pro zvýraznìní dùle¾itých pojmù. Existuje \uv{pravidlo}:
+
+\begin{quotation}
+	\textsc{Èím více druhù, øezù, velikostí, barev písma a jiných efektù pou\-¾i\-je\-me, tím profesionálnìji bude do\-ku\-me\-nt vypadat. Ètenáø tím bude v¾dy nad¹en!}
+\end{quotation}
+
+Tímto pravidlem se \underline{nikdy} nesmíte øídit. Pøíli¹ èasté zvýrazòování textových elementù a zmìny \huge{V}\LARGE{E}\Large{L}\large{I}\normalsize{K}\small{O}\footnotesize{S}\scriptsize{T}\tiny{I}\normalsize{ } písma \Large{jsou} \LARGE{známkou} \huge{\textbf{ama\-té\-ri\-smu}}\normalsize{ } autora a pùsobí \emph{\textbf{velmi} ru¹ivì}. Dobøe navr¾ený dokument nemá obsahovat více ne¾ 4 øezy èi druhy písma. \texttt{Dobøe navr¾ený dokument je decentní, ne chaotický}.
+
+Dùle¾itým znakem správnì vysázeného dokumentu je konzistentní pou¾ívání rùzných druhù zvýraznìní. To napøíklad mù¾e znamenat, ¾e \textbf{tuèný øez} písma bude vyhrazen pouze pro klíèová slova, \emph{sklonìný øez} pouze pro doposud neznámé pojmy a nebude se to míchat. Sklonìný øez nepùsobí tak ru¹ivì a pou¾ívá se èastìji. V~\LaTeX u jej sázíme radìji pøíkazem \verb=\emph{text}= ne¾ \verb=\textit{text}=.
+
+Smí¹ená sazba se nejèastìji pou¾ívá pro sazbu vì\-dec\-kých èlánkù a technických zpráv. U~del¹ích do\-ku\-men\-tù vìdeckého èi technického charakteru je zvykem upozornit ètenáøe na význam rùzných typù zvý\-raz\-nì\-ní v~úvodní kapitole.
+
+\section{Èeské odli¹nosti}
+
+Èeská sazba se oproti okolnímu svìtu v~nìkterých aspektech mírnì li¹í. Jednou z~odli¹ností je sazba uvo\-zo\-vek. Uvozovky se v~èe¹tinì pou¾ívají pøevá¾nì pro zobrazení pøímé øeèi. V~men¹í míøe se pou¾ívají také pro zvýraznìní pøezdívek a ironie. V~èe¹tinì se pou\-¾í\-vá tento \uv{typ uvo\-zo\-vek} namísto anglických ``uvo\-zo\-vek''.
+
+Ve smí¹ené sazbì se øez uvozovek øídí øezem pr\-vní\-ho uvozovaného slova. Pokud je uvo\-zo\-vá\-na celá vìta, sází se koncová teèka pøed uvozovku, pokud se uvozuje slovo nebo èást vìty, sází se teèka za uvozovku.
+
+Druhou odli¹ností je pravidlo pro sázení koncù øádkù. V~èeské sazbì by øádek nemìl konèit osa\-mo\-ce\-nou jednopísmennou pøedlo¾kou nebo spojkou (spojkou \uv{a} konèit mù¾e pøi sazbì do 25 liter). Abychom \LaTeX u zabránili v~sázení osamocených pøedlo¾ek, vkládáme mezi pøedlo¾ku a slovo nezlomitelnou me\-ze\-ru znakem \verb=~= (vlnka, tilda). Pro automatické doplnìní vlnek slou¾í volnì ¹iøitelný program \emph{vlna} od pana Ol¹áka\footnote{Viz ftp://math.feld.cvut.cz/pub/olsak/vlna/.}.
+
+\end{document}

@@ -1,0 +1,64 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{times}
+\usepackage[left=2cm, top=3cm, text={17cm, 24cm}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage{times}
+\usepackage{url}
+
+\providecommand{\uv}[1]{\quotedblbase#1\textquotedblleft}
+
+\DeclareUrlCommand\url{\def\UrlLeft{<}\def\UrlRight{>} \urlstyle{tt}}
+
+\author{Ondřej Valeš}
+\date{}
+
+\begin{document}
+	\begin{titlepage}
+		\centering
+		{\textsc{\Huge Vysoké učení technické v~Brně\\ \medskip
+		\huge Fakulta informačních technologií}}
+		
+		\vspace{\stretch{0.382}}
+		{\LARGE Typografie a publikování\,--\,3. projekt\\ \medskip
+		\Huge Citace}
+		
+		\vspace{\stretch{0.618}}	 
+		\Large \today \hfill Ondřej Valeš
+	\end{titlepage}
+
+\section{Typometrické systémy}
+
+Typografické míry se zásadně liší od běžných metrických měr, protože jejich vzik si vyžádala potřeba přípravy tiskovin předtím, než.
+Rozlišují se dva základní, nejpoužívanější systémy. Těmito systémy jsou \emph{Didotův} měrný systém, jehož základem jsou body a platí $1\,\mbox{b} = 0.03759\,\mbox{mm}$, a měrný 
+systém \emph{pica} \cite{Sirucek:2006}.
+
+Jednotky těchto systémů se potom používají pro definice velikostí mezer a znaků (důležité zejména pro správné strukturování dokumentů \cite{Rehorova:2006}). 
+Další důležitou jednotkou je \emph{čtverčík}, jedná se čtverec o straně o velikosti stejné, jako je velikost písma \cite{printing_type:2004}.
+
+\section{Zásady psaní mezer a pomlček}
+\subsection{Mezery}
+
+Velikost základní mezislovní mezery je potom třetina čtverčíku \cite{Beran:1994}. Speciálním typem mezery je nezlomitelná mezera, 
+píše se u jednopísmenných předložek a mezi číslem a jednotkou. Nezlomitelnou mezeru je vhodné použít k oddělení skupin číslic (po třech) \cite{Polacek:2008a}. 
+V ptostředí \LaTeX se k vysázení nezlomitelné mezery používá znak \verb|~| \cite{Lamport:1994}.
+
+Dalším případem použití nezlomitelné mezery je zápis data a času (zde pozor na odlišnosti české a anglické typografie\,--\,používáme 24hodinové intervaly a 
+časové údaje oddělujeme tečkou \cite{Polacek:2008b}).
+
+\subsection{Pomlčky}
+
+\begin{quote}
+Jednou z věcí, kterými se odlišuje knižní sazba od strojopisu, je pomlčka. Zatímco se na psacím stroji používá pro spojovník a pomlčku stejný znak, 
+ve fontech knižního písma nalezneme kromě spojovníku dokonce dvě pomlčky. Jednaje  dlouhá  (čtverčíková) a  druhá  je  krátká  (půlčtverčíková) \cite{Brezina:2006}.
+\end{quote}
+
+Pomlčka se v  prostředí \LaTeX napíše jako dvě pomlčky za sebou a je oddělena zůženou mezerou: \verb|\,--\,|. Používá se pro výrazné oddělení části textu.
+Tedy tam kde je potřeba naznačit větší přestávku v řeči \cite{Dostal:1994}.
+
+\newpage
+\renewcommand{\refname}{Použitá literatura}
+\bibliography{proj4}
+\bibliographystyle{czechiso}
+
+\end{document}
