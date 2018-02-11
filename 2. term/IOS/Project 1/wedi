@@ -1,0 +1,232 @@
+#!/bin/ksh
+
+# IOS projekt 1
+# VUT FIT 2014/2015
+# Autor: Ondrej Vales
+# Datum: 29. 3. 2015
+# Poznamky:	testováno pro sh a ksh na eva (FreeBSD)
+# 			
+
+# Omezeni: Znak % je rezervovan jako oddelovac, skript tedy neumi pracovat
+# se soubory v jejichz nazvu se tento znak vyskytuje.
+
+WEDI_RC="$0_rc"
+touch "$WEDI_RC" 2> /dev/null
+
+if ! [ -f "$WEDI_RC" ]
+then
+	echo "CHYBA: neni nastavena promenna WEDI_RC"
+	exit 1
+fi 
+
+# overeni dostupnosti utility realpath
+realpath "$WEDI_RC" > /dev/null 2> /dev/null
+if [ "$?" -ne 0 ]
+then
+	echo "CHYBA: utilita realpath neni dostupna"
+	exit 1
+fi 
+
+# overeni, zda alespon v jedne z promennych je nastaven editor
+if [ -n "$EDITOR" ]
+then 
+	EDI="$EDITOR"
+elif [ -n "$VISUAL" ]
+then 
+	EDI="$VISUAL"
+else
+	echo "CHYBA: neni nastaven editor"
+	exit 1
+fi
+
+# funkce zajistujici zmenu adresare, soucasne overujici uspesnost operace
+Change_dir()
+{
+	if [ -z "$1" ]
+	then
+		return 0
+	else
+		cd "$1" 2> /dev/null
+		if [ "$?" -ne 0 ]
+		then
+			echo "CHYBA: $1 neni adresar"
+			exit 1
+		fi 
+		return 0
+	fi
+}
+
+# funkce testujici, jesi je datum zadano ve spravnem formatu
+Date_test()
+{
+	DATE_TEST=$(echo "$1" | sed s%"^[0-9]\{4\}-[0-9][0-9]-[0-9][0-9]"%%)
+	if [ -z "$1" ]
+	then
+		echo "CHYBA: nebylo zadano datum ve formatu YYYY-MM-DD"
+		exit 1
+	fi
+	if [ -n "$DATE_TEST" ]
+	then
+		echo "CHYBA: $1 neni datum ve formatu YYYY-MM-DD"
+		exit 1
+	fi
+}
+
+# funkce vypisujici veskere editovane soubory v soucasnem adresari 
+L_function()
+{
+	POOL=$(cat "$WEDI_RC" | grep "^[0-9]\{15\}`realpath`/[^/][^/]*$" | sed s%"^[0-9]\{15\}`realpath`/"%% | sort | uniq | sed s/" "/"%"/g)
+	# promenna POOL obsahuje nazvy vsech editovanych souboru (mezery jsou nahrazeny %)
+	for ITEM in $POOL
+	do
+		ITEM=$(echo "$ITEM" | sed s/"%"/" "/g)
+		# vypisou se pouze existujici soubory
+		if [ -f "$ITEM" ]
+		then
+			echo "$ITEM"
+		fi
+	done
+	exit 0
+}
+
+# funkce vypisujici veskere editovane soubory v soucasnem adresari po zadanem datu
+A_function()
+{
+	# zadane datum se doplni na stejny format ve kterem jsou ulozena data ve WEDI_RC 
+	# doplneni nulami zajisti, ze funkce bude vypisovat editace po datu vcetne
+	DATUM=$(echo "$1""0000000" | sed s%"-"%%g)
+	LINE=$({ echo "$DATUM"; cat "$WEDI_RC"; } | sort -r | grep -n "^$DATUM" | sed s%":.*$"%%)
+	POOL=$({ echo "$DATUM"; cat "$WEDI_RC"; } | sort -r | head -n $LINE | grep "^[0-9]\{15\}`realpath`/[^/][^/]*$" | sed s%"^[0-9]\{15\}`realpath`/"%% | sort | uniq | sed s/" "/"%"/g)
+	# promenna POOL obsahuje nazvy vsech editovanych souboru po zadanem datu (mezery jsou nahrazeny %)
+	for ITEM in $POOL
+	do
+		ITEM=$(echo "$ITEM" | sed s/"%"/" "/g) 
+		# vypisou se pouze existujici soubory
+		if [ -f "$ITEM" ]
+		then
+			echo "$ITEM"
+		fi
+	done
+	exit 0
+}
+
+# funkce vypisujici veskere editovane soubory v soucasnem adresari pred zadanym datem
+B_function()
+{
+	# zadane datum se doplni na stejny format ve kterem jsou ulozena data ve WEDI_RC 
+	# doplneni devitkami zajisti, ze funkce bude vypisovat editace pred datem vcetne
+	DATUM=$(echo "$1""9999999" | sed s%"-"%%g)
+	LINE=$({ echo "$DATUM"; cat "$WEDI_RC"; } | sort | grep -n "^$DATUM" | sed s%":.*$"%%)	
+	POOL=$({ echo "$DATUM"; cat "$WEDI_RC"; } | sort | head -n $LINE | grep "^[0-9]\{15\}`realpath`/[^/][^/]*$" | sed s%"^[0-9]\{15\}`realpath`/"%% | sort | uniq | sed s/" "/"%"/g)
+	# promenna POOL obsahuje nazvy vsech editovanych souboru pred zadanym datem (mezery jsou nahrazeny %)
+	for ITEM in $POOL
+	do
+		ITEM=$(echo "$ITEM" | sed s/"%"/" "/g) 
+		# vypisou se pouze existujici soubory
+		if [ -f "$ITEM" ]
+		then
+			echo "$ITEM"
+		fi
+	done
+	exit 0
+}
+
+M_function()
+{
+	POOL=$(cat "$WEDI_RC" | grep "^[0-9]\{15\}`realpath`/[^/][^/]*$" | sed s%"^[0-9]\{15\}`realpath`"%% | sort | uniq -c | sort -nr | sed s%"^[^/]*/"%% | sed s/" "/"%"/g)
+	# promenna POOL obsahuje nazvy vsech editovanych souboru serazene podle cetnosti vyskytu
+	for ITEM in $POOL
+	do
+		ITEM=$(echo "$ITEM" | sed s/"%"/" "/g)
+		# otevirany soubor musi existovat
+		if [ -f "$ITEM" ]
+		then
+			echo "`date +"%Y%m%d%k%M%S"`1`realpath "$ITEM"`" >> "$WEDI_RC"
+			"$EDI" "$ITEM" 2> /dev/null
+			ERR="$?"
+			if [ "$ERR" -ne 0 ]
+			then
+				echo "CHYBA: doslo k problemu pri editaci souboru"
+			fi
+			exit $ERR
+		fi
+	done
+	# pokud projdu cely seznam a neotevru ani jeden soubor jedna se o chybu
+	echo "CHYBA: zadny soubor k editaci"
+	exit 1
+}
+
+Last_function()
+{
+	POOL=$(cat "$WEDI_RC" | sort -r | grep "^[0-9]\{15\}`realpath`/[^/][^/]*$" | sed s%"^[0-9]\{15\}`realpath`/"%% | sed s/" "/"%"/g)
+	# promenna POOL obsahuje nazvy vsech editovanych souboru serazene podle data editace
+	for ITEM in $POOL
+	do
+		ITEM=$(echo "$ITEM" | sed s/"%"/" "/g)   
+		# otevirany soubor musi existovat
+		if [ -f "$ITEM" ]
+		then
+			echo "`date +"%Y%m%d%k%M%S"`1`realpath "$ITEM"`" >> "$WEDI_RC"
+			"$EDI" "$ITEM" 2> /dev/null
+			ERR="$?"
+			if [ "$ERR" -ne 0 ]
+			then
+				echo "CHYBA: doslo k problemu pri editaci souboru"
+			fi
+			exit $ERR
+		fi
+	done
+	# pokud projdu cely seznam a neotevru ani jeden soubor jedna se o chybu
+	echo "CHYBA: zadny soubor k editaci"
+	exit 1	
+}
+
+# telo programu
+case "$1" in
+	"-m")
+		Change_dir "$2"
+		M_function
+	;;
+	"-l")
+		Change_dir "$2"
+		L_function
+	;;
+	"-a")
+		Date_test "$2"
+		Change_dir "$3"
+		A_function "$2"
+	;;
+	"-b")
+		Date_test "$2"
+		Change_dir "$3"
+		B_function "$2"
+	;;
+	*)
+		# spusteni bez argumentu
+		if [ -z "$1" ]
+		then
+			Last_function
+		# spusteni se znemou adresare
+		elif [ -d "$1" ]
+		then
+			Change_dir "$1"
+			Last_function
+		# spusteni s nazvem souboru
+		else
+			touch "$1" 2> /dev/null
+			if [ "$?" -ne 0 ]
+			then
+				echo "CHYBA: adresar neexistuje"
+				exit 1
+			fi
+			echo "`date +"%Y%m%d%k%M%S"`1`realpath "$1"`" >> "$WEDI_RC"
+			"$EDI" "$1" 2> /dev/null
+			ERR="$?"
+			if [ "$ERR" -ne 0 ]
+			then
+				echo "CHYBA: doslo k problemu pri editaci souboru"
+			fi
+			exit $ERR
+		fi
+	;;   
+esac
