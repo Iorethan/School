@@ -63,3 +63,12 @@ IMP | 14/14
 IMS | 20/20
 ISA | 15/15
 ITU | 51/55
+
+#### 7. term
+
+Project | Points
+--- | :---: 
+BIO | 13/18
+BIS – Project 1 | 7/7
+BIS – Project 2 | 7/8
+SFC | 29/30
