@@ -1,0 +1,39 @@
+
+# Autor: Ondrej Vales, xvales03
+# Predmet: ISA 2016/2017
+# Projekt: Monitorovani DHCP komunikace
+
+Program dhcp-stats
+
+Preklad
+	make		prelozi program
+	make clean	odstrani soubory vznikle pri prekladu, smaze logovaci soubor
+
+Spusteni
+	dhcp-stats ip-mask [ip-mask [...]]
+	dhcp-stats -c time ip-mask [ip-mask [...]]
+
+V pripade logovani do souboru je stav prubezne zapisovan do log.csv, log je mazan v ramci make clean.
+
+Dokumentace je v podobe manualove stranky
+	man ./dhcp-stats.1
+nebo
+	man -l dhcp-stats.1
+
+Soubory
+	buffer.h
+	dhcp-stats.1
+	dhcp-stats.cpp
+	error.cpp
+	error.h
+	fff
+	listener.cpp
+	listener.h
+	Makefile
+	message.cpp
+	message.h
+	network.cpp
+	network.h
+	printer.cpp
+	printer.h
+	README

@@ -1,0 +1,64 @@
+.TH DHCP\-STATS 1 2017-10-07
+.SH NAME
+dhcp-stats \- monitor utilization of DHCP managed networks.
+.SH SYNOPSIS
+.B dhcp-stats
+[\fB\-c\fR \fIint\fR]
+.IR ip-prefix ...
+.SH DESCRIPTION
+The \fBdhcp-stats\fR program provides an overview of networks and their utilization in real-time based on monitoring DHCP communication. 
+It displays list of netowrks, each consisting of name of the network with prefix, total number of hosts network may contain, current number of hosts and utilization as a percentage.
+.PP
+This owerview contains only hosts whose IP adress was asigned or renewed during the run of \fBdhcp-stats\fR.
+.PP
+Program works continuously until SIGTERM is sent.
+.SH OPTIONS
+.TP
+.IR ip-prefix\fR ...
+List of networks to monitor in x.x.x.x/mask format. Networks may overlap.
+.TP
+.BR \-c " " \fIint\fR
+Output to logfile log.csv in comma separated value format instead of terminal. New record is added every \fIint\fR seconds. Each record consists of line with timestamp and date and line with network information for each netowk. Records are separeted by blank line.
+.br
+
+.br
+Format of log is folowing:
+.br
+timestamp,  human-redable date
+.br
+network1,   number of hosts,     current hosts,  utilization
+.br
+network2,   number of hosts,     current hosts,  utilization
+.br
+ ...
+.br
+networkN,   number of hosts,     current hosts,  utilization
+.br
+
+.SH EXIT STATUS
+.TP
+0
+OK (never happens, program never stops unless terminated)
+.TP
+1
+unspecified error
+.TP
+2
+bad arguments
+.TP
+3
+error in creating socket
+.TP
+4
+error in reading from socket
+.SH BUGS
+Program uses internal clock to measure lease time, over long running period, precision of this internal clock may fall bellow sufficent level. This may cause some errors in output (showing IP adress as allocated just after its release).
+Precision is guaranteed to be sufficient for 3 years of continuous runtime, each time program is restarted, internal clock is recalibrated.
+.PP
+Program should be run on same machine as DHCP server to ensure access to all DHCP messages.
+.PP
+To monitor broadcast communication, root privilege may be required.
+.SH EXAMPLE
+dhcp-stats 10.0.0.0/8 10.0.0.0/16 10.1.0.0/16
+.PP
+dhcp-stats -c 10 10.0.0.0/8 10.0.0.0/16 10.1.0.0/16

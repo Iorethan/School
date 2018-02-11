@@ -53,3 +53,13 @@ ITY – Project 3 | 13/15
 ITY – Project 4 | 13/15
 ITY – Project 5 | 15/15
 IZG | 18/18
+
+#### 5. term
+
+Project | Points
+--- | :---: 
+IIS | 26/30
+IMP | 14/14
+IMS | 20/20
+ISA | 15/15
+ITU | 51/55
